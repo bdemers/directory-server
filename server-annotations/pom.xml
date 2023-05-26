@@ -93,7 +93,7 @@
         <configuration>
           <systemPropertyVariables>
             <felix.cache.rootdir>
-              ${project.build.directory}
+              ${project.build.directory}/felix-root
             </felix.cache.rootdir>
             <felix.cache.locking>
               false

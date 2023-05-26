@@ -19,7 +19,9 @@
   under the License.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd https://www.gradle.com/gradle-enterprise-maven-project https://www.gradle.com/schema/gradle-enterprise-maven-project.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.apache.directory.project</groupId>
@@ -338,6 +340,11 @@
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-remote-resources-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
           <configuration>
             <preparationGoals>clean install</preparationGoals>
@@ -485,6 +492,132 @@
             </properties>
           </configuration>
          </plugin>
+        <plugin>
+          <groupId>com.gradle</groupId>
+          <artifactId>gradle-enterprise-maven-extension</artifactId>
+          <configuration>
+            <gradleEnterprise xmlns="https://www.gradle.com/gradle-enterprise-maven-project">
+              <plugins>
+                <plugin>
+                  <artifactId>maven-surefire-plugin</artifactId>
+                  <inputs>
+                    <fileSets>
+                      <fileSet>
+                        <name>workingDirectory-wtf</name>
+                        <paths>
+                          <path>${basedir}/target/server-work</path>
+                        </paths>
+                        <normalization>
+                          <strategy>RELATIVE_PATH</strategy>
+                          <ignoreLineEndings>true</ignoreLineEndings>
+                        </normalization>
+                      </fileSet>
+                      <fileSet>
+                        <name>org.osgi.framework.storage</name>
+                        <paths>
+                          <path>${project.build.directory}/osgi-cache</path>
+                        </paths>
+                        <normalization>
+                          <strategy>RELATIVE_PATH</strategy>
+                          <ignoreLineEndings>true</ignoreLineEndings>
+                        </normalization>
+                      </fileSet>
+                      <fileSet>
+                        <name>felix.cache.rootdir</name>
+                        <paths>
+                          <path>${project.build.directory}/felix-root</path>
+                        </paths>
+                        <normalization>
+                          <strategy>RELATIVE_PATH</strategy>
+                          <ignoreLineEndings>true</ignoreLineEndings>
+                        </normalization>
+                      </fileSet>
+                      <fileSet>
+                        <name>codec.plugin.directory</name>
+                        <paths>
+                          <path>${project.build.directory}/pluginDirectory</path>
+                        </paths>
+                        <normalization>
+                          <strategy>RELATIVE_PATH</strategy>
+                          <ignoreLineEndings>true</ignoreLineEndings>
+                        </normalization>
+                      </fileSet>
+                    </fileSets>
+                  </inputs>
+                </plugin>
+                <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-remote-resources-plugin</artifactId>
+                  <executions>
+                    <execution>
+                      <id>process-resource-bundles</id>
+                      <iteratedProperties>
+                        <property>
+                          <name>resourceBundles</name>
+                        </property>
+                      </iteratedProperties>
+                      <outputs>
+                        <directories>
+                          <directory>
+                            <name>outputDirectory</name>
+                          </directory>
+                        </directories>
+                        <files>
+                          <file>
+                            <name>DEPENDENCIES</name>
+                            <path>${project.build.outputDirectory}/META-INF/DEPENDENCIES</path>
+                          </file>
+                          <file>
+                            <name>LICENSE</name>
+                            <path>${project.build.outputDirectory}/META-INF/LICENSE</path>
+                          </file>
+                          <file>
+                            <name>NOTICE</name>
+                            <path>${project.build.outputDirectory}/META-INF/NOTICE</path>
+                          </file>
+                        </files>
+                        <cacheableBecause>CPU bound resource filtering</cacheableBecause>
+                      </outputs>
+                      <inputs>
+                        <fileSets>
+                          <fileSet>
+                            <name>appendedResourcesDirectory</name>
+                          </fileSet>
+                        </fileSets>
+                        <properties>
+                          <property><name>attachToMain</name></property>
+                          <property><name>attachToTest</name></property>
+                          <property><name>encoding</name></property>
+                          <property><name>excludeArtifactIds</name></property>
+                          <property><name>excludeGroupIds</name></property>
+                          <property><name>excludeScope</name></property>
+                          <property><name>excludeTransitive</name></property>
+                          <property><name>filterDelimiters</name></property>
+                          <property><name>includeArtifactIds</name></property>
+                          <property><name>includeGroupIds</name></property>
+                          <property><name>includeProjectProperties</name></property>
+                          <property><name>includeScope</name></property>
+                          <property><name>outputTimestamp</name></property>
+                          <property><name>properties</name></property>
+                          <property><name>resolveScopes</name></property>
+                          <property><name>supplementalModelArtifacts</name></property>
+                          <property><name>supplementalModels</name></property>
+                          <property><name>useDefaultFilterDelimiters</name></property>
+                          <property><name>velocityFilterInMemoryThreshold</name></property>
+                        </properties>
+                        <ignoredProperties>
+                          <ignore>skip</ignore>
+                          <ignore>mavenSession</ignore>
+                          <ignore>project</ignore>
+                        </ignoredProperties>
+                      </inputs>
+                    </execution>
+                  </executions>
+                </plugin>
+              </plugins>
+            </gradleEnterprise>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
     
