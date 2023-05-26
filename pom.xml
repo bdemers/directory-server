@@ -19,7 +19,9 @@
   under the License.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd https://www.gradle.com/gradle-enterprise-maven-project https://www.gradle.com/schema/gradle-enterprise-maven-project.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.apache.directory.project</groupId>
@@ -485,6 +487,63 @@
             </properties>
           </configuration>
          </plugin>
+        <plugin>
+          <groupId>com.gradle</groupId>
+          <artifactId>gradle-enterprise-maven-extension</artifactId>
+          <configuration>
+            <gradleEnterprise xmlns="https://www.gradle.com/gradle-enterprise-maven-project">
+              <plugins>
+                <plugin>
+                  <artifactId>maven-surefire-plugin</artifactId>
+                  <inputs>
+                    <fileSets>
+                      <fileSet>
+                        <name>workingDirectory-wtf</name>
+                        <paths>
+                          <path>${basedir}/target/server-work</path>
+                        </paths>
+                        <normalization>
+                          <strategy>RELATIVE_PATH</strategy>
+                          <ignoreLineEndings>true</ignoreLineEndings>
+                        </normalization>
+                      </fileSet>
+                      <fileSet>
+                        <name>org.osgi.framework.storage</name>
+                        <paths>
+                          <path>${project.build.directory}/osgi-cache</path>
+                        </paths>
+                        <normalization>
+                          <strategy>RELATIVE_PATH</strategy>
+                          <ignoreLineEndings>true</ignoreLineEndings>
+                        </normalization>
+                      </fileSet>
+                      <fileSet>
+                        <name>felix.cache.rootdir</name>
+                        <paths>
+                          <path>${project.build.directory}</path>
+                        </paths>
+                        <normalization>
+                          <strategy>RELATIVE_PATH</strategy>
+                          <ignoreLineEndings>true</ignoreLineEndings>
+                        </normalization>
+                      </fileSet>
+                      <fileSet>
+                        <name>codec.plugin.directory</name>
+                        <paths>
+                          <path>${project.build.directory}/pluginDirectory</path>
+                        </paths>
+                        <normalization>
+                          <strategy>RELATIVE_PATH</strategy>
+                          <ignoreLineEndings>true</ignoreLineEndings>
+                        </normalization>
+                      </fileSet>
+                    </fileSets>
+                  </inputs>
+                </plugin>
+              </plugins>
+            </gradleEnterprise>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
     
