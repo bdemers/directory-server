@@ -520,7 +520,7 @@
                       <fileSet>
                         <name>felix.cache.rootdir</name>
                         <paths>
-                          <path>${project.build.directory}</path>
+                          <path>${project.build.directory}/felix-root</path>
                         </paths>
                         <normalization>
                           <strategy>RELATIVE_PATH</strategy>
